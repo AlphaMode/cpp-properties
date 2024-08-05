@@ -36,32 +36,7 @@ PropertiesParser::~PropertiesParser() {
 Properties PropertiesParser::Read(const std::string& file) {
     Properties properties;
 
-    std::ifstream is;
-    is.open(file.c_str());
-    if (!is.is_open()) {
-        throw PropertiesException("PropertiesParser::Read(" + file + "): Unable to open file for reading.");
-    }
-
-    try {
-        size_t linenr = 0;
-        std::string line;
-        while (getline(is, line)) {
-            if (PropertiesUtils::IsEmptyLine(line) || PropertiesUtils::IsComment(line)) {
-                // ignore it
-            } else if (PropertiesUtils::IsProperty(line)) {
-                std::pair<std::string, std::string> prop = PropertiesUtils::ParseProperty(line);
-                properties.AddProperty(prop.first, prop.second);
-            } else {
-                throw PropertiesException("PropertiesParser::Read(" + file + "): Invalid line " + std::to_string(linenr) + ": " + line);
-            }
-            ++linenr;
-        }
-        is.close();
-    } catch (...) {
-        // don't forget to close the ifstream
-        is.close();
-        throw;
-    }
+    properties.load(file);
 
     return properties;
 }

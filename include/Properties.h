@@ -36,6 +36,8 @@ public:
     Properties();
     virtual ~Properties();
 
+    void load(const std::string& file);
+
     /**
      * Gets the property value from a given key.
      *
